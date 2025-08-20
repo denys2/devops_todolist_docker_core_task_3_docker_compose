@@ -16,6 +16,14 @@ COPY --from=builder /app .
 RUN pip install --upgrade pip && \
     pip install -r requirements.txt
 
+# Instal MySQL
+RUN apt-get update && apt-get install -y default-mysql-client
+
+# add script for waiting
+COPY wait-for-db.sh /wait-for-db.sh
+RUN chmod +x /wait-for-db.sh
+
 EXPOSE 8000
 
-ENTRYPOINT ["sh", "-c", "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"]
+# ENTRYPOINT 
+ENTRYPOINT ["/wait-for-db.sh"]
