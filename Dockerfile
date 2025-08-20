@@ -9,7 +9,6 @@ COPY . .
 FROM python:${PYTHON_VERSION} as run
 
 WORKDIR /app
-
 ENV PYTHONUNBUFFERED=1
 
 COPY --from=builder /app .
@@ -19,5 +18,4 @@ RUN pip install --upgrade pip && \
 
 EXPOSE 8000
 
-# Виконуємо міграції та запускаємо сервер при старті контейнера
 ENTRYPOINT ["sh", "-c", "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"]
